@@ -3,325 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FBF8F2">
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FBF8F2">
 <title>BravoFlock</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-:root{
-  --bg:#FBF8F2; --paper:#FFFDF8; --ink:#2A2620; --soft:#6E665A; --line:#E7DFD0; --gold:#A8874A; --gold-soft:#F3EBDB; --hl:#FBF0D3;
-  --shadow:0 1px 2px rgba(60,45,20,.06),0 6px 24px rgba(60,45,20,.07);
-  --serif:'Crimson Pro',Georgia,'Times New Roman',serif; --sans:'DM Sans',system-ui,sans-serif; --mono:'DM Mono',ui-monospace,monospace; --display:'Playfair Display',Georgia,serif;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1C1A17;--paper:#24211D;--ink:#EDE6D8;--soft:#A79E8F;--line:#3A352E;--gold:#C9A869;--gold-soft:#2F2A22;--hl:#3A3122;--shadow:0 1px 2px rgba(0,0,0,.3)}}
-:root[data-theme="dark"]{--bg:#1C1A17;--paper:#24211D;--ink:#EDE6D8;--soft:#A79E8F;--line:#3A352E;--gold:#C9A869;--gold-soft:#2F2A22;--hl:#3A3122;--shadow:0 1px 2px rgba(0,0,0,.3)}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
-button,input,select{font:inherit;color:inherit}
-.hidden{display:none!important}
-/* top bar */
-header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top) + 8px) 16px 8px;display:flex;align-items:center;gap:10px}
-.brand{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.2px;white-space:nowrap}
-.brand span,.card h1 span{color:var(--gold);font-weight:700}
-.goto{flex:1;display:flex;gap:6px;max-width:260px;margin-left:auto}
-.goto input{width:100%;min-width:0;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:8px 10px;font-family:var(--mono);font-size:16px}
-.btn{border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:8px 12px;cursor:pointer}
-.btn.gold{background:var(--gold);border-color:var(--gold);color:#fff}
-.icon{width:38px;height:38px;display:inline-grid;place-items:center;padding:0}
-nav.tabs{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--line);overflow-x:auto;background:var(--bg)}
-nav.tabs button{border:0;background:none;padding:7px 12px;border-radius:999px;cursor:pointer;color:var(--soft);white-space:nowrap}
-nav.tabs button.on{background:var(--gold-soft);color:var(--ink);font-weight:600}
-main{padding:16px;max-width:1100px;margin:0 auto}
-/* sign-in */
-.center{min-height:70vh;display:grid;place-items:center;text-align:center}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:28px 24px;max-width:380px}
-.card h1{font-family:var(--display);margin:0 0 6px;font-size:30px}
-.card p{color:var(--soft);line-height:1.5}
-/* book view */
-.bookbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;color:var(--soft);font-size:14px}
-.spread{display:flex;gap:18px;justify-content:center;align-items:flex-start}
-.page{background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);width:100%;max-width:470px;min-height:62vh;padding:22px 20px 34px;position:relative;overflow:hidden}
-.page.blank{background:transparent;box-shadow:none;border-style:dashed}
-.pageno{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:11px;color:var(--soft)}
-.hymn{font-family:var(--serif);font-size:var(--fs,19px);line-height:1.28;margin-bottom:1.1em;border-radius:6px}
-.hymn.hl{background:var(--hl);box-shadow:0 0 0 8px var(--hl)}
-.hhead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:.35em}
-.hnum{font-family:var(--serif);font-weight:700;font-size:2em;line-height:1;cursor:pointer}
-.hmeta{text-align:right;font-size:.66em;color:var(--soft);line-height:1.3}
-.hmeta i{display:block}
-.st{display:grid;grid-template-columns:1.3em 1fr;margin:.55em 0}
-.st .vn{font-size:.68em;padding-top:.3em;color:var(--ink)}
-.ln{white-space:nowrap}
-.ref{margin-left:1.3em}
-.ai{display:inline-flex;gap:6px;margin-top:.3em}
-.chip{font-family:var(--sans);font-size:12px;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:3px 9px;cursor:pointer;color:var(--soft)}
-.navarrow{position:fixed;top:50%;transform:translateY(-50%);z-index:5;width:44px;height:64px;border-radius:12px;border:1px solid var(--line);background:var(--paper);opacity:.85;cursor:pointer;font-size:22px}
-#prev{left:6px} #next{right:6px}
-@media (max-width:820px){.spread .page.second{display:none}.navarrow{display:none}}
-/* lists */
-.search{display:flex;gap:8px;margin-bottom:12px}
-.search input{flex:1;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:11px 12px;font-size:16px}
-.list{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.row{display:grid;grid-template-columns:52px 1fr auto;gap:10px;padding:11px 14px;border-top:1px solid var(--line);cursor:pointer;align-items:baseline}
-.row:first-child{border-top:0}
-.row:hover{background:var(--gold-soft)}
-.row .n{font-family:var(--mono);color:var(--gold);font-weight:500}
-.row .t{font-family:var(--serif);font-size:17px}
-.row .m{font-size:12px;color:var(--soft);font-family:var(--mono)}
-.sub{color:var(--soft);font-size:13px;margin:4px 0 12px}
-.group{margin:18px 0 6px;font-family:var(--display);font-size:18px}
-.pills{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}
-.pill{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 11px;cursor:pointer;font-size:14px}
-.pill.on{background:var(--gold);border-color:var(--gold);color:#fff}
-mark{background:var(--hl);color:inherit;border-radius:3px}
-/* modal */
-.modal{position:fixed;inset:0;background:rgba(20,15,8,.45);display:grid;place-items:center;z-index:50;padding:16px}
-.modal .card{max-width:420px;width:100%;text-align:left}
-.menu{position:absolute;right:16px;top:58px;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:6px;z-index:40;min-width:200px}
-.menu button{display:block;width:100%;text-align:left;border:0;background:none;padding:10px 12px;border-radius:8px;cursor:pointer}
-.menu button:hover{background:var(--gold-soft)}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:14px;z-index:60}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#FBF8F2;color:#2A2620;font-family:Georgia,serif}
+@media (prefers-color-scheme:dark){body{background:#1C1A17;color:#EDE6D8}}
+.w{font-size:30px;font-weight:700}.w span{color:#A8874A}.m{font:14px system-ui,sans-serif;opacity:.7;margin-top:10px;text-align:center}
 </style>
 </head>
 <body>
-<header id="top" class="hidden">
-  <div class="brand">Bravo<span>Flock</span></div>
-  <form class="goto" id="gotoForm" autocomplete="off">
-    <input id="gotoInput" inputmode="numeric" pattern="[0-9]*" placeholder="Hymn no." aria-label="Go to hymn number">
-    <button class="btn gold" type="submit">Go</button>
-  </form>
-  <button class="btn icon" id="menuBtn" aria-label="Menu">⋯</button>
-</header>
-<div class="menu hidden" id="menu">
-  <button data-act="font+">Larger text</button>
-  <button data-act="font-">Smaller text</button>
-  <button data-act="theme">Light / dark</button>
-  <button data-act="refresh">Refresh hymns</button>
-  <button data-act="signout">Sign out</button>
-</div>
-<nav class="tabs hidden" id="tabs">
-  <button data-tab="book" class="on">Book</button>
-  <button data-tab="search">Search</button>
-  <button data-tab="metres">Metres</button>
-  <button data-tab="authors">Authors</button>
-  <button data-tab="occasions">Occasions</button>
-  <button data-tab="themes">Themes</button>
-</nav>
-<main id="main">
-  <div class="center" id="loading"><div class="card"><h1>Bravo<span>Flock</span></h1><p>Loading…</p></div></div>
-</main>
-<button class="navarrow hidden" id="prev" aria-label="Previous page">‹</button>
-<button class="navarrow hidden" id="next" aria-label="Next page">›</button>
-
+<div><div class="w">Bravo<span>Flock</span></div><div class="m" id="m"></div></div>
 <script>
-const SB_URL='https://xgmnyhpzuwngdngtttux.supabase.co';
-const SB_KEY='sb_publishable_pTYp1DS4yrzeytovirmEWw_77BulU8_';
-const CACHE='bravoflock-hymns-v1', PREF='bravoflock-prefs';
-const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
-let prefs=Object.assign({fs:19,page:1,tab:'book'},store.get(PREF)||{});
-const savePrefs=()=>store.set(PREF,prefs);
-if(prefs.theme) document.documentElement.dataset.theme=prefs.theme;
-document.documentElement.style.setProperty('--fs',prefs.fs+'px');
-
-let sb=null, D=null, IDX=null, highlight=null;
-const TEST=window.__BH_TEST__||null;
-
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
-
-/* ---------- auth & data ---------- */
-async function boot(){
-  if(TEST){D=TEST;return ready()}
-  sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,detectSessionInUrl:true,flowType:'pkce'}});
-  const {data:{session}}=await sb.auth.getSession();
-  if(!session) return showSignIn();
-  const {data:mem,error}=await sb.from('flock_members').select('email').limit(1);
-  if(error||!mem||!mem.length) return showSignIn(session.user.email);
-  D=store.get(CACHE);
-  if(!D){ $('#main').innerHTML='<div class="center"><div class="card"><h1>Bravo<span>Flock</span></h1><p>Fetching the hymn book…</p></div></div>'; D=await fetchAll(); store.set(CACHE,D) }
-  ready();
-}
-async function fetchTable(t,cols,order){
-  let out=[],from=0;
-  for(;;){const {data,error}=await sb.from(t).select(cols).order(order[0]).order(order[1]||order[0]).order(order[2]||order[0]).range(from,from+999);
-    if(error) throw error; out=out.concat(data); if(data.length<1000) break; from+=1000}
-  return out;
-}
-async function fetchAll(){
-  const [hymns,stanzas,lines,pages,authors,ha,tags,occ]=await Promise.all([
-    fetchTable('hymn_hymns','number,metre,source_line,verse_count,first_line,data',['number']),
-    fetchTable('hymn_stanzas','hymn,stanza,number_as_printed,is_refrain,page',['hymn','stanza']),
-    fetchTable('hymn_lines','hymn,stanza,line,text,indent',['hymn','stanza','line']),
-    fetchTable('hymn_pages','page,side,items',['page']),
-    fetchTable('hymn_authors','id,name,place,dates,bio',['id']),
-    fetchTable('hymn_hymn_authors','hymn,author_id,note',['hymn','author_id']),
-    fetchTable('hymn_verse_tags','hymn,stanza,addressee,themes,reviewed',['hymn','stanza']),
-    fetchTable('hymn_occasions','id,card,occasion,hymn,note',['id'])]);
-  return {hymns,stanzas,lines,pages,authors,ha,tags,occ,at:Date.now()};
-}
-function showSignIn(badEmail){
-  $('#main').innerHTML=`<div class="center"><div class="card"><h1>Bravo<span>Flock</span></h1>
-  <p>${badEmail?`<b>${esc(badEmail)}</b> isn’t on the BravoFlock list. Sign in with the family Google account.`:'Sign in with your family Google account.'}</p>
-  <button class="btn gold" id="g">Continue with Google</button>${badEmail?' <button class="btn" id="so">Sign out</button>':''}</div></div>`;
-  $('#g').onclick=()=>sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});
-  if(badEmail) $('#so').onclick=signOut;
-}
-async function signOut(){store.del(CACHE);if(sb) await sb.auth.signOut();location.reload()}
-
-/* ---------- index ---------- */
-function buildIndex(){
-  const H={},S={},L={},A={},HA={},T={},O=[];
-  D.hymns.forEach(h=>H[h.number]=h);
-  D.stanzas.forEach(s=>(S[s.hymn]=S[s.hymn]||[]).push(s));
-  D.lines.forEach(l=>(L[l.hymn+'-'+l.stanza]=L[l.hymn+'-'+l.stanza]||[]).push(l));
-  D.authors.forEach(a=>A[a.id]=a);
-  D.ha.forEach(x=>(HA[x.hymn]=HA[x.hymn]||[]).push(x));
-  D.tags.forEach(x=>(T[x.hymn]=T[x.hymn]||[]).push(x));
-  const P={}; D.pages.forEach(p=>P[p.page]=p);
-  const firstPage={}; D.pages.forEach(p=>(p.items||[]).forEach(it=>{if(!(it.hymn in firstPage)) firstPage[it.hymn]=p.page}));
-  const norm=s=>s.toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]+/g,' ').replace(/\s+/g,' ').trim();
-  const lineIdx=D.lines.filter(l=>l.stanza<100||true).map(l=>({h:l.hymn,s:l.stanza,n:norm(l.text),t:l.text}));
-  IDX={H,S,L,A,HA,T,P,firstPage,norm,lineIdx,maxPage:Math.max(...D.pages.map(p=>p.page))};
-}
-
-/* ---------- rendering: book ---------- */
-function stanzaHTML(h,st){
-  const lines=IDX.L[h+'-'+st.stanza]||[];
-  return `<div class="st${st.is_refrain?' ref':''}"><div class="vn">${st.is_refrain?'':esc(st.number_as_printed||'')}</div><div>${
-    lines.map(l=>`<div class="ln" style="padding-left:${(l.indent||0)*1.15}em">${esc(l.text)}</div>`).join('')}</div></div>`;
-}
-function itemHTML(it){
-  const h=it.hymn, H=IDX.H[h]; if(!H) return '';
-  const stz=IDX.S[h]||[], refr=(H.data&&H.data.refrains)||[];
-  let out=`<section class="hymn${highlight===h?' hl':''}" id="h${h}">`;
-  if(it.heading){
-    out+=`<div class="hhead"><div class="hnum" data-author="${h}" title="About the author">${h}</div><div class="hmeta">${H.source_line?`<i>${esc(H.source_line)}</i>`:''}${esc(H.metre)}</div></div>`;
-  }
-  (it.verses||[]).forEach(v=>{
-    const st=stz.find(s=>s.stanza===v); if(st) out+=stanzaHTML(h,st);
-    refr.filter(r=>r.afterStanza===v).forEach(r=>{const rs=stz.find(s=>s.stanza===r.stanza); if(rs) out+=stanzaHTML(h,rs)});
-  });
-  if(it.heading) out+=`<div class="ai"><span class="chip" data-author="${h}">About the author</span></div>`;
-  return out+'</section>';
-}
-function pageHTML(n,extra=''){
-  const p=IDX.P[n];
-  if(!p||!(p.items||[]).length) return `<div class="page blank ${extra}"><div class="pageno">${n>0&&n<=IDX.maxPage?n:''}</div></div>`;
-  return `<div class="page ${extra}" data-page="${n}">${p.items.map(itemHTML).join('')}<div class="pageno">${n}</div></div>`;
-}
-const wide=()=>innerWidth>820;
-function renderBook(){
-  let n=Math.min(Math.max(prefs.page||1,1),IDX.maxPage); prefs.page=n; savePrefs();
-  let html;
-  if(wide()){const left=n%2===0?n:n-1, right=left+1; html=`<div class="spread">${pageHTML(left)}${pageHTML(right,'second')}</div>`; }
-  else html=`<div class="spread">${pageHTML(n)}</div>`;
-  const hs=[...new Set(((IDX.P[n]||{}).items||[]).map(i=>i.hymn))];
-  $('#main').innerHTML=`<div class="bookbar"><button class="btn" id="pv">‹ Prev</button><span>${hs.length?'Hymn '+hs.join(', '):''}</span><button class="btn" id="nx">Next ›</button></div>${html}`;
-  $('#pv').onclick=()=>turn(-1); $('#nx').onclick=()=>turn(1);
-  fitPages();
-  if(highlight){const el=document.getElementById('h'+highlight); if(el) el.scrollIntoView({block:'nearest'})}
-}
-function fitPages(){
-  document.querySelectorAll('.page').forEach(pg=>{
-    pg.style.setProperty('--fs',prefs.fs+'px');
-    let fs=prefs.fs, guard=0;
-    const over=()=>[...pg.querySelectorAll('.ln')].some(l=>l.scrollWidth>l.clientWidth+1||l.getBoundingClientRect().right>pg.getBoundingClientRect().right-14);
-    while(over()&&fs>11&&guard++<20){fs-=0.5;pg.style.setProperty('--fs',fs+'px')}
-  });
-}
-function turn(d){const step=wide()?2:1; let n=prefs.page;
-  if(wide()){const left=n%2===0?n:n-1; n=left+d*step; if(n<0) n=0;} else n+=d;
-  if(n<1&&!wide()) n=1; if(n>IDX.maxPage) n=IDX.maxPage; prefs.page=Math.max(n,1); highlight=null; renderBook()}
-function openHymn(h){h=parseInt(h,10); if(!IDX.H[h]) return toast('No hymn '+h); highlight=h; prefs.page=IDX.firstPage[h]||1; setTab('book')}
-
-/* ---------- search & browse ---------- */
-function row(h,txt,meta){return `<div class="row" data-open="${h}"><div class="n">${h}</div><div class="t">${txt}</div><div class="m">${esc(meta||'')}</div></div>`}
-function renderSearch(q=''){
-  $('#main').innerHTML=`<form class="search" id="sf"><input id="q" placeholder="Words from any line, e.g. not of the world" value="${esc(q)}" autocomplete="off"><button class="btn gold">Search</button></form><div id="res"></div>`;
-  const run=()=>{const v=$('#q').value.trim(); if(/^\d{1,3}$/.test(v)) return openHymn(v); const words=IDX.norm(v).split(' ').filter(Boolean);
-    if(!words.length){$('#res').innerHTML='<p class="sub">Search every line of all 451 hymns.</p>';return}
-    const hits=[]; const seen=new Set();
-    for(const l of IDX.lineIdx){ if(words.every(w=>l.n.includes(w))){const k=l.h+'-'+l.s; if(!seen.has(k)){seen.add(k);hits.push(l)} if(hits.length>=150)break}}
-    const re=new RegExp('('+words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','gi');
-    $('#res').innerHTML=`<p class="sub">${hits.length>=150?'150+':hits.length} match${hits.length===1?'':'es'}</p><div class="list">${hits.map(l=>row(l.h,esc(l.t).replace(re,'<mark>$1</mark>'),l.s>=100?'chorus':'v'+l.s)).join('')}</div>`;
-  };
-  $('#sf').onsubmit=e=>{e.preventDefault();run()}; $('#q').oninput=()=>{clearTimeout(window._st);window._st=setTimeout(run,180)}; run(); $('#q').focus();
-}
-function renderMetres(){
-  const g={}; D.hymns.forEach(h=>(g[h.metre]=g[h.metre]||[]).push(h.number));
-  const ks=Object.keys(g).sort((a,b)=>g[b].length-g[a].length||a.localeCompare(b));
-  $('#main').innerHTML=`<p class="sub">${ks.length} metres. Hymns in the same metre can share a tune.</p>`+ks.map(k=>`<div class="group">${esc(k)} <span class="sub">(${g[k].length})</span></div><div class="pills">${g[k].map(n=>`<span class="pill" data-open="${n}">${n}</span>`).join('')}</div>`).join('');
-}
-function renderAuthors(){
-  const by={}; D.ha.forEach(x=>(by[x.author_id]=by[x.author_id]||[]).push(x));
-  const last=n=>n.split(' ').slice(-1)[0];
-  const as=D.authors.filter(a=>by[a.id]).sort((a,b)=>last(a.name).localeCompare(last(b.name))||a.name.localeCompare(b.name));
-  $('#main').innerHTML=`<form class="search" onsubmit="return false"><input id="af" placeholder="Filter authors"></form><div id="al"></div>`;
-  const draw=f=>{$('#al').innerHTML=as.filter(a=>!f||a.name.toLowerCase().includes(f)).map(a=>`<div class="group">${esc(a.name)} <span class="sub">${esc([a.place,a.dates].filter(Boolean).join(' · '))}</span></div><div class="pills">${by[a.id].sort((x,y)=>x.hymn-y.hymn).map(x=>`<span class="pill" data-open="${x.hymn}">${x.hymn}${x.note?' '+esc(x.note):''}</span>`).join('')}</div>`).join('')};
-  draw(''); $('#af').oninput=e=>draw(e.target.value.toLowerCase().trim());
-}
-function renderOccasions(){
-  const cards={}; D.occ.forEach(o=>{(cards[o.card]=cards[o.card]||{});(cards[o.card][o.occasion]=cards[o.card][o.occasion]||[]).push(o)});
-  const names=Object.keys(cards).sort(); let cur=prefs.card&&cards[prefs.card]?prefs.card:names[0];
-  const draw=()=>{$('#main').innerHTML=`<p class="sub">From your four suggestion cards. Suggestions only.</p><div class="pills">${names.map(c=>`<span class="pill${c===cur?' on':''}" data-card="${c}">Card ${esc(c)}</span>`).join('')}</div>`+
-    Object.entries(cards[cur]).map(([occ,list])=>`<div class="group">${esc(occ)}</div><div class="pills">${list.map(o=>`<span class="pill" data-open="${o.hymn}">${o.hymn}${o.note?' '+esc(o.note):''}</span>`).join('')}</div>`).join('');
-    document.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>{cur=b.dataset.card;prefs.card=cur;savePrefs();draw()})};
-  draw();
-}
-function renderThemes(){
-  const th={}, ad={};
-  D.tags.forEach(t=>{(t.themes||[]).forEach(x=>{(th[x]=th[x]||{});(th[x][t.hymn]=th[x][t.hymn]||[]).push(t.stanza)}); if(t.addressee){(ad[t.addressee]=ad[t.addressee]||{});(ad[t.addressee][t.hymn]=ad[t.addressee][t.hymn]||[]).push(t.stanza)}});
-  const order=['Lord','Father','God','Spirit','Trinity'];
-  const adK=Object.keys(ad).sort((a,b)=>((order.indexOf(a)+1)||99)-((order.indexOf(b)+1)||99)||a.localeCompare(b));
-  const vs=a=>a.filter(s=>s<100).sort((x,y)=>x-y);
-  const list=m=>`<div class="pills">${Object.keys(m).map(Number).sort((a,b)=>a-b).map(h=>{const v=vs(m[h]),all=IDX.H[h]&&v.length===IDX.H[h].verse_count;return `<span class="pill" data-open="${h}">${h}${all?'':' v'+v.join(',')}</span>`}).join('')}</div>`;
-  $('#main').innerHTML=`<p class="sub">AI-suggested tags, not yet reviewed. Who each verse is addressed to, then subjects.</p>
-  <div class="group">Addressed to</div><div class="pills">${adK.map(a=>`<span class="pill" data-ad="${esc(a)}">${esc(a)}</span>`).join('')}</div><div id="adl"></div>
-  <form class="search" onsubmit="return false" style="margin-top:18px"><input id="tf" placeholder="Filter ${Object.keys(th).length} themes, e.g. peace"></form><div id="tl"></div>`;
-  document.querySelectorAll('[data-ad]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-ad]').forEach(x=>x.classList.toggle('on',x===b));$('#adl').innerHTML=list(ad[b.dataset.ad])});
-  const draw=f=>{$('#tl').innerHTML=Object.keys(th).sort().filter(k=>!f||k.toLowerCase().includes(f)).map(k=>`<div class="group">${esc(k)}</div>${list(th[k])}`).join('')};
-  draw(''); $('#tf').oninput=e=>draw(e.target.value.toLowerCase().trim());
-}
-function authorModal(h){
-  const xs=IDX.HA[h]||[];
-  const body=xs.length?xs.map(x=>{const a=IDX.A[x.author_id]||{};return `<p><b>${esc(a.name)}</b>${x.note?' <span class="sub">('+esc(x.note)+')</span>':''}<br><span class="sub">${esc([a.place,a.dates].filter(Boolean).join(' · ')||'')}</span>${a.bio?'<br>'+esc(a.bio):''}</p>`}).join(''):'<p class="sub">No author recorded.</p>';
-  const m=document.createElement('div'); m.className='modal'; m.innerHTML=`<div class="card"><h1 style="font-size:22px">Hymn ${h}</h1>${body}<p class="sub">More about the authors coming later.</p><button class="btn">Close</button></div>`;
-  m.onclick=e=>{if(e.target===m||e.target.tagName==='BUTTON') m.remove()}; document.body.appendChild(m);
-}
-
-/* ---------- shell ---------- */
-function setTab(t){prefs.tab=t;savePrefs();document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
-  ['prev','next'].forEach(id=>$('#'+id).classList.toggle('hidden',t!=='book'));
-  ({book:renderBook,search:()=>renderSearch(),metres:renderMetres,authors:renderAuthors,occasions:renderOccasions,themes:renderThemes})[t]();
-  if(t!=='book') scrollTo(0,0)}
-function ready(){
-  buildIndex();
-  ['#top','#tabs'].forEach(s=>$(s).classList.remove('hidden'));
-  $('#gotoForm').onsubmit=e=>{e.preventDefault();const v=$('#gotoInput').value.trim();if(v){openHymn(v);$('#gotoInput').value='';$('#gotoInput').blur()}};
-  $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b) setTab(b.dataset.tab)};
-  $('#prev').onclick=()=>turn(-1); $('#next').onclick=()=>turn(1);
-  $('#menuBtn').onclick=e=>{e.stopPropagation();$('#menu').classList.toggle('hidden')};
-  document.addEventListener('click',e=>{
-    if(!e.target.closest('#menu')) $('#menu').classList.add('hidden');
-    const o=e.target.closest('[data-open]'); if(o) return openHymn(o.dataset.open);
-    const a=e.target.closest('[data-author]'); if(a) return authorModal(+a.dataset.author);
-  });
-  $('#menu').onclick=async e=>{const act=e.target.dataset.act; if(!act) return; $('#menu').classList.add('hidden');
-    if(act==='font+'||act==='font-'){prefs.fs=Math.min(30,Math.max(13,prefs.fs+(act==='font+'?1:-1)));savePrefs();document.documentElement.style.setProperty('--fs',prefs.fs+'px');if(prefs.tab==='book')renderBook()}
-    if(act==='theme'){const dark=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()==='#1C1A17';prefs.theme=dark?'light':'dark';document.documentElement.dataset.theme=prefs.theme;savePrefs()}
-    if(act==='refresh'&&sb){toast('Refreshing…');D=await fetchAll();store.set(CACHE,D);buildIndex();setTab(prefs.tab);toast('Up to date')}
-    if(act==='signout') signOut();
-  };
-  document.addEventListener('keydown',e=>{if(prefs.tab!=='book'||e.target.tagName==='INPUT')return; if(e.key==='ArrowRight')turn(1); if(e.key==='ArrowLeft')turn(-1)});
-  let x0=null,y0=null; document.addEventListener('touchstart',e=>{if(prefs.tab==='book'){x0=e.touches[0].clientX;y0=e.touches[0].clientY}},{passive:true});
-  document.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5) turn(dx<0?1:-1)},{passive:true});
-  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(prefs.tab==='book')renderBook()},200)});
-  setTab(prefs.tab||'book');
-}
-boot().catch(err=>{console.error(err);$('#main').innerHTML=`<div class="center"><div class="card"><h1>Bravo<span>Flock</span></h1><p>Something went wrong: ${esc(err.message||err)}</p><button class="btn" onclick="location.reload()">Try again</button></div></div>`});
+/* BravoFlock loader: this page never changes. It runs the latest published version of the app (code only, no hymn text). */
+(async()=>{
+  const URL='https://xgmnyhpzuwngdngtttux.supabase.co/rest/v1/flock_app_versions?select=id,html&order=id.desc&limit=1';
+  const KEY='sb_publishable_pTYp1DS4yrzeytovirmEWw_77BulU8_', C='bravoflock-app';
+  const run=h=>{document.open();document.write(h);document.close()};
+  let cached=null; try{cached=JSON.parse(localStorage.getItem(C))}catch(e){}
+  try{
+    const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),7000);
+    const r=await fetch(URL,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},cache:'no-store',signal:ctl.signal});
+    clearTimeout(t);
+    const rows=await r.json();
+    if(rows&&rows[0]&&rows[0].html){try{localStorage.setItem(C,JSON.stringify(rows[0]))}catch(e){} return run(rows[0].html)}
+  }catch(e){}
+  if(cached&&cached.html) return run(cached.html);
+  document.getElementById('m').textContent='Couldn’t load. Check your connection and refresh.';
+})();
 </script>
 </body>
 </html>
